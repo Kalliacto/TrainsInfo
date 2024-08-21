@@ -1,0 +1,27 @@
+.wrapper {
+    padding: 20px;
+    background-color: var(--white);
+    border-radius: 10px;
+}
+
+.table {
+    border-collapse: collapse;
+    width: 100%;
+    text-align: center;
+}
+
+.table__title {
+    font-size: 18px;
+    font-weight: 700;
+    text-align: left;
+    margin-bottom: 10px;
+}
+.table__thead {
+    background-color: var(--gray);
+    padding: 20px;
+    color: gray;
+}
+
+th {
+    padding: 10px 20px;
+}

@@ -1,26 +1,27 @@
-import React from 'react';
-import logo from './logo.svg';
+import { useAppDispatch, useAppSelector } from './store/hooks';
 import './App.css';
+import { RootState } from './store/store';
+import { useEffect, useState } from 'react';
+import { getInfoTrains } from './store/trainsSlice';
+import TrainTable from './components/TrainTable/TrainTable';
+import CharacteristicsTable from './components/CharacteristicsTable/CharacteristicsTable';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    const dispatch = useAppDispatch();
+    const { loading, trains, currentTrain } = useAppSelector((state: RootState) => state.trains);
+
+    useEffect(() => {
+        if (loading) {
+            dispatch(getInfoTrains());
+        }
+    }, [dispatch, loading]);
+
+    return (
+        <div className='App'>
+            <TrainTable trains={trains} />
+            {!!currentTrain && <CharacteristicsTable train={trains.find((el) => el.name === currentTrain)} />}
+        </div>
+    );
 }
 
 export default App;
