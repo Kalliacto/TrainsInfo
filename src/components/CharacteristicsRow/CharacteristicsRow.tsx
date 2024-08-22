@@ -1,12 +1,18 @@
 import './style.css';
 import { CharacteristicProps } from '../../types';
+import Cell from '../Cell/Cell';
 
-const CharacteristicsRow: React.FC<CharacteristicProps> = ({ characteristics }) => {
+const CharacteristicsRow: React.FC<CharacteristicProps> = ({ characteristics, index, setValid }) => {
     return (
         <tr>
-            <td>{characteristics.engineAmperage}</td>
-            <td>{characteristics.force}</td>
-            <td>{characteristics.speed}</td>
+            <Cell
+                value={characteristics.engineAmperage}
+                characteristicName={'engineAmperage'}
+                index={index}
+                setValid={setValid}
+            />
+            <Cell value={characteristics.force} characteristicName={'force'} index={index} setValid={setValid} />
+            <Cell value={characteristics.speed} characteristicName={'speed'} index={index} setValid={setValid} />
         </tr>
     );
 };

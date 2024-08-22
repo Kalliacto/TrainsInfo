@@ -1,7 +1,7 @@
 import { useAppDispatch, useAppSelector } from './store/hooks';
 import './App.css';
 import { RootState } from './store/store';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { getInfoTrains } from './store/trainsSlice';
 import TrainTable from './components/TrainTable/TrainTable';
 import CharacteristicsTable from './components/CharacteristicsTable/CharacteristicsTable';

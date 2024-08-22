@@ -1,13 +1,14 @@
 import { createAsyncThunk, createSlice, PayloadAction, ThunkAction } from '@reduxjs/toolkit';
-import { TrainInfo } from '../types';
+import { Characteristic, TrainInfo } from '../types';
 
 export type GetInfoTrainsAction = ThunkAction<Promise<void>, {}, unknown, { type: 'trainsInfo/getInfoTrains' }>;
 
 interface TrainsInfoState {
     trains: TrainInfo[];
     loading: boolean;
-    error?: Error;
     currentTrain: string;
+    currentTrainInfo?: TrainInfo;
+    error?: Error;
 }
 
 const initialState: TrainsInfoState = {
@@ -43,6 +44,17 @@ const trainsSlice = createSlice({
     reducers: {
         setCurrentTrain(state, action: PayloadAction<string>) {
             state.currentTrain = action.payload;
+            state.currentTrainInfo = state.trains.find((train) => train.name === state.currentTrain);
+        },
+        setValue(state, action: PayloadAction<[number, string, number]>) {
+            if (state.currentTrainInfo) {
+                state.currentTrainInfo.characteristics = state.currentTrainInfo.characteristics.map((el, i) => {
+                    if (i === action.payload[2]) {
+                        return { ...el, [action.payload[1]]: [action.payload[0]] };
+                    } else return el;
+                });
+                state.trains = state.trains.map((el) => (el === state.currentTrainInfo ? state.currentTrainInfo : el));
+            }
         },
     },
     extraReducers: (builder) => {
@@ -57,6 +69,6 @@ const trainsSlice = createSlice({
     },
 });
 
-export const { setCurrentTrain } = trainsSlice.actions; // Для reducers
+export const { setCurrentTrain, setValue } = trainsSlice.actions; // Для reducers
 
 export default trainsSlice.reducer;

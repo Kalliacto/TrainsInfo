@@ -25,4 +25,6 @@ export interface TrainProps {
 
 export interface CharacteristicProps {
     characteristics: Characteristic;
+    index: number;
+    setValid: (value: boolean) => void;
 }
