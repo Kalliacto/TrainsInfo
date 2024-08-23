@@ -9,6 +9,7 @@ import CharacteristicsTable from './components/CharacteristicsTable/Characterist
 function App() {
     const dispatch = useAppDispatch();
     const { loading, trains, currentTrain } = useAppSelector((state: RootState) => state.trains);
+    const train = trains.find((el) => el.name === currentTrain) || null;
 
     useEffect(() => {
         if (loading) {
@@ -19,7 +20,7 @@ function App() {
     return (
         <div className='App'>
             <TrainTable trains={trains} />
-            {!!currentTrain && <CharacteristicsTable train={trains.find((el) => el.name === currentTrain)} />}
+            {!!train && <CharacteristicsTable train={train} />}
         </div>
     );
 }
