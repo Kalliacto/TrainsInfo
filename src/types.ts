@@ -3,6 +3,11 @@ export interface TrainInfo {
     description: string;
     characteristics: Characteristic[];
 }
+export enum CharacteristicName {
+    speed = 'speed',
+    engineAmperage = 'engineAmperage',
+    force = 'force',
+}
 
 export interface Characteristic {
     speed: number;
@@ -20,9 +25,20 @@ export interface TrainRowProps {
 }
 
 export interface TrainProps {
-    train: TrainInfo | undefined;
+    train: TrainInfo;
 }
 
 export interface CharacteristicProps {
     characteristics: Characteristic;
+    index: number;
+    setValid: (value: boolean) => void;
+}
+export interface CellProps {
+    value: number;
+    characteristicName: CharacteristicName;
+    index: number;
+    indexObj: number;
+    valid: boolean;
+    trainName: string;
+    changeValidStatus: (index: number, value: string, characteristicName: string) => void;
 }

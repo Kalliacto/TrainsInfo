@@ -1,9 +1,0 @@
-tr:not(:last-child) {
-    border-bottom: 2px solid var(--gray);
-}
-tbody tr:hover {
-    cursor: pointer;
-}
-td {
-    padding: 10px 20px;
-}

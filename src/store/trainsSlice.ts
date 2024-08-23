@@ -1,13 +1,21 @@
 import { createAsyncThunk, createSlice, PayloadAction, ThunkAction } from '@reduxjs/toolkit';
-import { TrainInfo } from '../types';
+import { CharacteristicName, TrainInfo } from '../types';
 
 export type GetInfoTrainsAction = ThunkAction<Promise<void>, {}, unknown, { type: 'trainsInfo/getInfoTrains' }>;
 
 interface TrainsInfoState {
     trains: TrainInfo[];
     loading: boolean;
-    error?: Error;
     currentTrain: string;
+    currentTrainInfo?: TrainInfo;
+    error?: Error;
+}
+
+interface setValueFn {
+    value: string;
+    trainName: string;
+    indexObj: number;
+    characteristicName: CharacteristicName;
 }
 
 const initialState: TrainsInfoState = {
@@ -18,7 +26,7 @@ const initialState: TrainsInfoState = {
 
 export const getInfoTrains = createAsyncThunk<TrainInfo[], void, { rejectValue: Error }>(
     'trainsInfo/getInfoTrains',
-    async (_, thunkAPI) => {
+    async () => {
         try {
             const res = await fetch(
                 'https://gist.githubusercontent.com/allbel/ae2f8ead09baf7bb66d281e3a6050261/raw/4c898f101913cd7918ab1dbfce008fa12c6d4838/mock.json'
@@ -26,12 +34,6 @@ export const getInfoTrains = createAsyncThunk<TrainInfo[], void, { rejectValue: 
             const resInfo = await res.json();
             return resInfo;
         } catch (error) {
-            // if (error instanceof Error) {
-            //     const newError = new Error(error.message);
-            //     return thunkAPI.rejectWithValue(newError);
-            // } else {
-            //     console.error('Error message is not a string:', error);
-            // }
             console.error('Error message is not a string:', error);
         }
     }
@@ -43,6 +45,13 @@ const trainsSlice = createSlice({
     reducers: {
         setCurrentTrain(state, action: PayloadAction<string>) {
             state.currentTrain = action.payload;
+            state.currentTrainInfo = state.trains.find((train) => train.name === state.currentTrain);
+        },
+        setValue(state, { payload }: PayloadAction<setValueFn>) {
+            let train = state.trains.find((train) => train.name === payload.trainName);
+            if (train) {
+                train.characteristics[payload.indexObj][payload.characteristicName] = Number(payload.value);
+            }
         },
     },
     extraReducers: (builder) => {
@@ -50,13 +59,9 @@ const trainsSlice = createSlice({
             state.trains = action.payload;
             state.loading = false;
         });
-        // builder.addCase(getInfoTrains.rejected, (state, action: PayloadAction<Error>) => {
-        //     state.error = action.payload;
-        //     state.loading = false;
-        // });
     },
 });
 
-export const { setCurrentTrain } = trainsSlice.actions; // Для reducers
+export const { setCurrentTrain, setValue } = trainsSlice.actions;
 
 export default trainsSlice.reducer;
